@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 public class Main extends Canvas {
+    public static spriteRun activeSprite;
+
     public static void main(String[] args) {
         Color menuBoxColor = new Color(222, 148, 0);
         Color canvasBoxColor = new Color(138, 130, 114);
@@ -27,7 +29,7 @@ public class Main extends Canvas {
         JPanel pathInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton browseButton = new JButton("Browse");
         pathInputPanel.add(browseButton);
-        JTextField pathTextField = new JTextField("Enter the path to your spritesheet here", 46);
+        JTextField pathTextField = new JTextField("Enter the path to your spritesheet here", 57);
         pathInputPanel.add(pathTextField);
         pathInputPanel.setBackground(menuBoxColor);
 
@@ -62,12 +64,19 @@ public class Main extends Canvas {
         fpsPanel.add(fpsLabel);
         fpsPanel.add(fpsTextField);
 
+        JPanel targetRowPanel = new JPanel(new GridLayout(0, 1));
+        JLabel targetRowLabel = new JLabel("Target row");
+        JTextField targetRowTextField = new JTextField("60",10);
+        targetRowPanel.add(targetRowLabel);
+        targetRowPanel.add(targetRowTextField);
+
         JPanel setVarsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         setVarsPanel.add(heightPanel);
         setVarsPanel.add(widthPanel);
         setVarsPanel.add(rowsPanel);
         setVarsPanel.add(columnsPanel);
         setVarsPanel.add(fpsPanel);
+        setVarsPanel.add(targetRowPanel);
         setVarsPanel.setBackground(menuBoxColor);
 
         //Run panel
@@ -80,19 +89,6 @@ public class Main extends Canvas {
         menuBox.add(pathInputPanel);
         menuBox.add(setVarsPanel);
         menuBox.add(runPanel);
-
-        //Add action listener to open file chooser dialog
-        browseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(jfrCore);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    pathTextField.setText(selectedFile.getAbsolutePath());
-                }
-            }
-        });
 
         //Canvas panel
         JPanel canvasBox = new JPanel();
@@ -110,6 +106,27 @@ public class Main extends Canvas {
 
         jfrCore.pack();
         jfrCore.setVisible(true);
+
+        //Add action listener to browse button
+        browseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int result = fileChooser.showOpenDialog(jfrCore);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    pathTextField.setText(selectedFile.getAbsolutePath());
+                }
+            }
+        });
+
+        //Add action listener to run button
+        runButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                activeSprite = new spriteRun(Integer.parseInt(heightTextField.getText()), Integer.parseInt(widthTextField.getText()), Integer.parseInt(rowsTextField.getText()), Integer.parseInt(columnsTextField.getText()), Integer.parseInt(fpsTextField.getText()), Integer.parseInt(targetRowTextField.getText()), pathTextField.getText());
+            }
+        });
     }
 
     private static void setJFrameAttributes(JFrame frameMain) {
