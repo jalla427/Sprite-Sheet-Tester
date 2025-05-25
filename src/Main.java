@@ -124,7 +124,11 @@ public class Main extends Canvas {
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                activeSprite = new spriteRun(Integer.parseInt(heightTextField.getText()), Integer.parseInt(widthTextField.getText()), Integer.parseInt(rowsTextField.getText()), Integer.parseInt(columnsTextField.getText()), Integer.parseInt(fpsTextField.getText()), Integer.parseInt(targetRowTextField.getText()), pathTextField.getText());
+                activeSprite = new spriteRun(Integer.parseInt(heightTextField.getText()), Integer.parseInt(widthTextField.getText()),
+                                            Integer.parseInt(rowsTextField.getText()), Integer.parseInt(columnsTextField.getText()),
+                                            Integer.parseInt(fpsTextField.getText()), Integer.parseInt(targetRowTextField.getText()),
+                                            pathTextField.getText());
+                activeSprite.startAnim();
             }
         });
     }
