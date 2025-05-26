@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferStrategy;
 import java.io.File;
 
 import javax.swing.*;
@@ -10,6 +11,9 @@ import javax.swing.border.Border;
 
 public class Main extends Canvas {
     public static spriteRun activeSprite;
+    static Canvas canvas;
+    Graphics2D g;
+    static int canvasSize = 300;
 
     public static void main(String[] args) {
         Color menuBoxColor = new Color(222, 148, 0);
@@ -95,8 +99,8 @@ public class Main extends Canvas {
         canvasBox.setBackground(canvasBoxColor);
         canvasBox.setBorder(border);
 
-        Canvas canvas = new Canvas();
-        canvas.setSize(300, 300);
+        canvas = new Canvas();
+        canvas.setSize(canvasSize, canvasSize);
         canvas.setBackground(Color.WHITE);
         canvasBox.add(canvas, BorderLayout.CENTER);
 
@@ -128,7 +132,28 @@ public class Main extends Canvas {
                                             Integer.parseInt(rowsTextField.getText()), Integer.parseInt(columnsTextField.getText()),
                                             Integer.parseInt(fpsTextField.getText()), Integer.parseInt(targetRowTextField.getText()),
                                             pathTextField.getText());
-                activeSprite.startAnim();
+                activeSprite.loadImage();
+
+                int rowCounter = 1;
+                while(0 == 0) {
+                    while(rowCounter < activeSprite.getRows()) {
+                        for(int i = 1; i <= activeSprite.getColumns(); i++) {
+                            //Define canvas graphics
+                            BufferStrategy bs = canvas.getBufferStrategy();
+                            if(bs == null) {
+                                canvas.createBufferStrategy(3);
+                                return;
+                            }
+                            Graphics g = bs.getDrawGraphics();
+
+                            g.drawImage(activeSprite.grabImage(rowCounter, i, activeSprite.getWidth(), activeSprite.getHeight()),
+                                    (canvasSize + activeSprite.getHeight())/2, (canvasSize + activeSprite.getWidth())/2, null);
+                            g.dispose();
+                            bs.show();
+                        }
+                        rowCounter++;
+                    }
+                }
             }
         });
     }
